@@ -1,11 +1,12 @@
 package com.example.backendreservacionesspring.controller;
 
+import com.example.backendreservacionesspring.dto.ApiResponse;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.service.SpaceService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,39 +21,39 @@ public class SpaceController {
     }
 
     @GetMapping
-    public List<Space> getSpaces() {
-        return spaceService.findAll();
+    public ApiResponse<List<Space>> getSpaces() {
+        List<Space> spaces = spaceService.findAll();
+        return ApiResponse.success(spaces);
     }
 
     @PostMapping
-    public ResponseEntity<Space> createSpace(@RequestBody Space space) {
+    public ApiResponse<Space> createSpace(@RequestBody Space space) {
         Space createdSpace = spaceService.saveSpace(space);
-        return new ResponseEntity<>(createdSpace, HttpStatus.CREATED);
+        return ApiResponse.created(createdSpace);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Space> getSpaceById(@PathVariable Long id) {
+    public ApiResponse<Space> getSpaceById(@PathVariable Long id) {
         Space space = spaceService.findSpaceById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Space no encontrado con id: " + id));
-        return new ResponseEntity<>(space, HttpStatus.OK);
+        return ApiResponse.success(space);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Space> updateSpace(@PathVariable Long id, @RequestBody Space space) {
-        Space updateSpace = spaceService.update(id, space);
-        return new ResponseEntity<>(updateSpace, HttpStatus.OK);
+    public ApiResponse<Space> updateSpace(@PathVariable Long id, @RequestBody Space space) {
+        Space updatedSpace = spaceService.update(id, space);
+        return ApiResponse.success(updatedSpace);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Space> updateSpaceById(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-        Space updateSpace = spaceService.updateParcial(id, campos);
-        return new ResponseEntity<>(updateSpace, HttpStatus.OK);
+    public ApiResponse<Space> updateSpaceById(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+        Space updatedSpace = spaceService.updateParcial(id, campos);
+        return ApiResponse.success(updatedSpace);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Space> deleteSpaceById(@PathVariable Long id) {
-        Space deletedSpace = spaceService.deleteSpace(id);
-        return new ResponseEntity<>(deletedSpace, HttpStatus.OK);
+    public ApiResponse<Void> deleteSpaceById(@PathVariable Long id) {
+        spaceService.deleteSpace(id);
+        return ApiResponse.success(null);
     }
 }
-
