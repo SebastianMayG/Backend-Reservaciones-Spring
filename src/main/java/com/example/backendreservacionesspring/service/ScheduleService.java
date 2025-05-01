@@ -30,6 +30,9 @@ public class ScheduleService {
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
     }
+    public List<Schedule> findBySpaceId(Long spaceId) {
+        return scheduleRepository.findSchedulesBySpaceIdNative(spaceId);
+    }
 
     public Schedule update(Long id, Schedule scheduleUpdated){
         return scheduleRepository.findById(id).map(schedule -> {
