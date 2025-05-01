@@ -1,13 +1,17 @@
 package com.example.backendreservacionesspring.service;
 
 import com.example.backendreservacionesspring.model.Schedule;
+import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.repository.ScheduleRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
 
+@Service
 public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 
@@ -47,10 +51,10 @@ public class ScheduleService {
         }).orElseThrow(() -> new RuntimeException("Schedule not found"));
     }
 
-    public void deleteSchedule(Long id) {
-        if(!scheduleRepository.existsById(id)) {
-            throw new RuntimeException("Schedule not found");
-        }
+    public Schedule deleteSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Schedule no encontrado con id: " + id));
         scheduleRepository.deleteById(id);
+        return schedule;
     }
 }
