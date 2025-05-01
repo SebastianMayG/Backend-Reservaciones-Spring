@@ -3,10 +3,13 @@ package com.example.backendreservacionesspring.service;
 import jakarta.persistence.EntityNotFoundException;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.repository.SpaceRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.Map;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Service
 public class SpaceService {
     private SpaceRepository spaceRepository;
 
@@ -18,7 +21,7 @@ public class SpaceService {
         return spaceRepository.findAll();
     }
 
-    public Optional<Space> findById(Long id){
+    public Optional<Space> findSpaceById(Long id){
         return spaceRepository.findById(id);
     }
 
@@ -51,10 +54,10 @@ public class SpaceService {
         }).orElseThrow(()-> new RuntimeException("Space no encontrado"));
     }
 
-    public void deleteSpace(Long id){
-        if(!spaceRepository.existsById(id)) {
-            throw new EntityNotFoundException("Space no encontrado con id: " + id);
-        }
+    public Space deleteSpace(Long id) {
+        Space space = spaceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Space no encontrado con id: " + id));
         spaceRepository.deleteById(id);
+        return space;
     }
 }
