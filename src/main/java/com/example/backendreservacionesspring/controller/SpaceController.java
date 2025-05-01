@@ -4,6 +4,7 @@ import com.example.backendreservacionesspring.dto.ApiResponse;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.service.SpaceService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class SpaceController {
     }
 
     @PostMapping
-    public ApiResponse<Space> createSpace(@RequestBody Space space) {
+    public ApiResponse<Space> createSpace(@RequestBody @Valid Space space) {
         Space createdSpace = spaceService.saveSpace(space);
         return ApiResponse.created(createdSpace);
     }
@@ -46,7 +47,7 @@ public class SpaceController {
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<Space> updateSpaceById(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+    public ApiResponse<Space> updatePartialSpace(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
         Space updatedSpace = spaceService.updateParcial(id, campos);
         return ApiResponse.success(updatedSpace);
     }

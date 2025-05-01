@@ -1,6 +1,7 @@
 package com.example.backendreservacionesspring.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.NotBlank;
@@ -20,16 +21,16 @@ public class Space {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "El nombre de la sala es obligatorio")
+    @NotNull(message = "El nombre de la sala es obligatorio")
     private String name;
 
     @Column(nullable = false)
-    @NotBlank(message = "La descripcion de la sala es obligatorio")
+    @NotNull(message = "La descripcion de la sala es obligatorio")
     private String description;
 
     @Column(nullable = false)
-    @NotBlank(message = "La capacidad de la sala es obligatorio")
-    private int capacity;
+    @NotNull(message = "La capacidad de la sala es obligatorio")
+    private Integer capacity;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
