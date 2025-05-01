@@ -1,9 +1,9 @@
-package controller;
+package com.example.backendreservacionesspring.controller;
 
-import model.User;
+import com.example.backendreservacionesspring.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.UserService;
+import com.example.backendreservacionesspring.service.UserService;
 
 import java.util.List;
 import java.util.Map;

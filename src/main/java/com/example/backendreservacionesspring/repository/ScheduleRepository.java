@@ -1,7 +1,7 @@
-package repository;
+package com.example.backendreservacionesspring.repository;
 
 
-import model.Schedule;
+import com.example.backendreservacionesspring.model.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

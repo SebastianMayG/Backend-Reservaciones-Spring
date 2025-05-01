@@ -1,9 +1,9 @@
-package service;
+package com.example.backendreservacionesspring.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import model.User;
+import com.example.backendreservacionesspring.model.User;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
+import com.example.backendreservacionesspring.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;

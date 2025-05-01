@@ -1,35 +1,38 @@
-package model;
+package com.example.backendreservacionesspring.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name ="space")
-@Getter @Setter
-public class Space {
+@Table(name = "users")
+@Getter
+@Setter
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "El nombre de la sala es obligatorio")
+    @NotBlank(message = "El nombre es obligatorio")
     private String name;
 
-    @Column(nullable = false)
-    @NotBlank(message = "La descripcion de la sala es obligatorio")
-    private String description;
+    @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "El apellido es obligatorio")
+    private String lastName;
 
     @Column(nullable = false)
-    @NotBlank(message = "La capacidad de la sala es obligatorio")
-    private int capacity;
+    @NotBlank(message = "El email es obligatorio")
+    private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "El password es obligatorio")
+    private String password;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
@@ -39,8 +42,7 @@ public class Space {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-// Relación con Schedule (1 Space → N Schedules)
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Schedule> schedules = new ArrayList<>();
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 }

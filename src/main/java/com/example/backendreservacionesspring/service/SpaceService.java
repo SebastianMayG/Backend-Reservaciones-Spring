@@ -1,8 +1,8 @@
-package service;
+package com.example.backendreservacionesspring.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import model.Space;
-import repository.SpaceRepository;
+import com.example.backendreservacionesspring.model.Space;
+import com.example.backendreservacionesspring.repository.SpaceRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;

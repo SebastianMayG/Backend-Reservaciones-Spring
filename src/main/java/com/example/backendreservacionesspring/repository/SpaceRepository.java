@@ -1,6 +1,6 @@
-package repository;
+package com.example.backendreservacionesspring.repository;
 
-import model.Space;
+import com.example.backendreservacionesspring.model.Space;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
