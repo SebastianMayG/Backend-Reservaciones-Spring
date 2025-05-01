@@ -1,7 +1,7 @@
-package service;
+package com.example.backendreservacionesspring.service;
 
-import model.Schedule;
-import repository.ScheduleRepository;
+import com.example.backendreservacionesspring.model.Schedule;
+import com.example.backendreservacionesspring.repository.ScheduleRepository;
 
 import java.time.LocalTime;
 import java.util.List;
