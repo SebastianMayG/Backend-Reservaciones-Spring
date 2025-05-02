@@ -9,9 +9,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "signarutes")
+@Table(name = "signature")
 @Getter @Setter
 
 public class Signatures {
@@ -31,5 +33,6 @@ public class Signatures {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-
+    @OneToMany(mappedBy = "signature", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Practices> practices = new ArrayList<>();
 }
