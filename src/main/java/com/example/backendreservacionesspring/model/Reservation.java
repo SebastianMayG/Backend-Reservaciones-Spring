@@ -22,9 +22,6 @@ public class Reservation {
     @Column(name = "id_space", nullable = false)
     private Long idSpace;
 
-    @Column(name = "id_user", nullable = false)
-    private Long idUser;
-
     @Column(name = "date", nullable = false)
     private LocalDate date;
 

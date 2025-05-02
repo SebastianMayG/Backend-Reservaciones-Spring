@@ -17,9 +17,6 @@ public class Practices {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_asignatura", nullable = false)
-    int idAsignatura;
-
     @Column(name = "name", nullable = false)
     @NotBlank(message = "El nombre de la practica es obligatorio")
     String name;
