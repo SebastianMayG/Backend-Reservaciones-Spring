@@ -1,6 +1,6 @@
 package com.example.backendreservacionesspring.service;
 
-import com.example.backendreservacionesspring.model.Practices;
+import com.example.backendreservacionesspring.model.Practice;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.backendreservacionesspring.repository.PracticeRepository;
@@ -17,19 +17,19 @@ public class PracticeService {
         this.practiceRepository = practiceRepository;
     }
 
-    public List<Practices> findAll() {
+    public List<Practice> findAll() {
         return practiceRepository.findAll();
     }
 
-    public Optional<Practices> findById(Long id) {
+    public Optional<Practice> findById(Long id) {
         return practiceRepository.findById(id);
     }
 
-    public Practices savePractice(Practices practice) {
+    public Practice savePractice(Practice practice) {
         return practiceRepository.save(practice);
     }
 
-    public Practices update(Long id, Practices practiceUpdated) {
+    public Practice update(Long id, Practice practiceUpdated) {
         return practiceRepository.findById(id).map(practice -> {
             practice.setName(practiceUpdated.getName());
             practice.setUrl(practiceUpdated.getUrl());
@@ -39,7 +39,7 @@ public class PracticeService {
         }).orElseThrow(() -> new RuntimeException("Práctica no encontrada"));
     }
 
-    public Practices updatePartial(Long id, Map<String, Object> campos) {
+    public Practice updatePartial(Long id, Map<String, Object> campos) {
         return practiceRepository.findById(id).map(practice -> {
             if(campos.containsKey("name")) {
                 practice.setName((String) campos.get("name"));
@@ -66,7 +66,7 @@ public class PracticeService {
     }
 
     // Método adicional para buscar prácticas por asignatura
-    public List<Practices> findBySignatureId(Long signatureId) {
+    public List<Practice> findBySignatureId(Long signatureId) {
         return practiceRepository.findBySignatureId(signatureId);
     }
 }

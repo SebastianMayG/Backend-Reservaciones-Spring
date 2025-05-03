@@ -1,6 +1,6 @@
 package com.example.backendreservacionesspring.controller;
 
-import com.example.backendreservacionesspring.model.Practices;
+import com.example.backendreservacionesspring.model.Practice;
 import com.example.backendreservacionesspring.service.PracticeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,44 +20,44 @@ public class PracticeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Practices>> getAllPractices() {
-        List<Practices> practices = practiceService.findAll();
+    public ResponseEntity<List<Practice>> getAllPractices() {
+        List<Practice> practices = practiceService.findAll();
         return ResponseEntity.ok(practices);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Practices> getPracticeById(@PathVariable Long id) {
+    public ResponseEntity<Practice> getPracticeById(@PathVariable Long id) {
         return practiceService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/by-signature/{signatureId}")
-    public ResponseEntity<List<Practices>> getPracticesBySignature(@PathVariable Long signatureId) {
-        List<Practices> practices = practiceService.findBySignatureId(signatureId);
+    public ResponseEntity<List<Practice>> getPracticesBySignature(@PathVariable Long signatureId) {
+        List<Practice> practices = practiceService.findBySignatureId(signatureId);
         return ResponseEntity.ok(practices);
     }
 
     @PostMapping
-    public ResponseEntity<Practices> createPractice(@RequestBody Practices practice) {
-        Practices savedPractice = practiceService.savePractice(practice);
+    public ResponseEntity<Practice> createPractice(@RequestBody Practice practice) {
+        Practice savedPractice = practiceService.savePractice(practice);
         return ResponseEntity.created(URI.create("/api/practices/" + savedPractice.getId()))
                 .body(savedPractice);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Practices> updatePractice(
+    public ResponseEntity<Practice> updatePractice(
             @PathVariable Long id,
-            @RequestBody Practices practiceDetails) {
-        Practices updatedPractice = practiceService.update(id, practiceDetails);
+            @RequestBody Practice practiceDetails) {
+        Practice updatedPractice = practiceService.update(id, practiceDetails);
         return ResponseEntity.ok(updatedPractice);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Practices> partialUpdatePractice(
+    public ResponseEntity<Practice> partialUpdatePractice(
             @PathVariable Long id,
             @RequestBody Map<String, Object> updates) {
-        Practices updatedPractice = practiceService.updatePartial(id, updates);
+        Practice updatedPractice = practiceService.updatePartial(id, updates);
         return ResponseEntity.ok(updatedPractice);
     }
 

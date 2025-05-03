@@ -1,6 +1,5 @@
 package com.example.backendreservacionesspring.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -9,21 +8,22 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "signature")
+@Table(name = "practices")
 @Getter @Setter
-
-public class Signatures {
+public class Practice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (name = "name", nullable = false)
-    @NotBlank(message = "Nombre de la asignatura obligatorio")
-    private String nombre;
+    @Column(name = "name", nullable = false)
+    @NotBlank(message = "El nombre de la practica es obligatorio")
+    String name;
+
+    @Column(name = "url", nullable = false)
+    @NotBlank(message = "La dirección URL es obligatoria")
+    String url;
 
     @Column(name = "create_at", updatable = false)
     @CreationTimestamp
@@ -33,6 +33,7 @@ public class Signatures {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    @OneToMany(mappedBy = "signature", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Practices> practices = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "id_asignatura", nullable = false)
+    private Signature signature;
 }
