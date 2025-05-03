@@ -1,29 +1,26 @@
 package com.example.backendreservacionesspring.model;
 
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "practices")
+@Table(name = "lists")
 @Getter @Setter
-public class Practices {
+public class List {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    @NotBlank(message = "El nombre de la practica es obligatorio")
-    String name;
-
-    @Column(name = "url", nullable = false)
-    @NotBlank(message = "La dirección URL es obligatoria")
-    String url;
+    @Column(name = "date_list")
+    private LocalDateTime dateList;
 
     @Column(name = "create_at", updatable = false)
     @CreationTimestamp
@@ -33,7 +30,11 @@ public class Practices {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
-    @ManyToOne
-    @JoinColumn(name = "id_asignatura", nullable = false)
-    private Signatures signature;
+    @ManyToMany
+    @JoinTable(
+            name = "student_list",
+            joinColumns = @JoinColumn(name = "id_list"), // FK de List
+            inverseJoinColumns = @JoinColumn(name = "id_student") // FK de Student
+    )
+    private Set<Student> students = new HashSet<>();
 }
