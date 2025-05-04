@@ -1,6 +1,7 @@
 package com.example.backendreservacionesspring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -45,6 +48,20 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Reservation> reservations = new ArrayList<>();;
+
+//    public Integer getRole() {
+//        return role != null ? role.getId() : null;
+//    }
+
+    @JsonProperty("role")
+    public Integer getRoleId() {
+        return role != null ? role.getId() : null;
+    }
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/practices")
+@RequestMapping("api/practices")
 public class PracticeController {
 
     private final PracticeService practiceService;

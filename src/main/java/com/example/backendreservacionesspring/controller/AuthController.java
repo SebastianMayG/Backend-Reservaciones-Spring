@@ -48,6 +48,7 @@ public class AuthController {
         String token = Jwts.builder()
                 .subject(savedUser.getEmail())
                 .claim("role", savedUser.getRole().getId())
+                .claim("userId", savedUser.getId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
                 .signWith(generalKey())
@@ -56,9 +57,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "data", savedUser, // devolver informacion del usuario
                 "token", token,
-                "code",201,
-                "role", user.getRole().getId()
-
+                "code",201
         ));
     }
 
@@ -80,6 +79,7 @@ public class AuthController {
         String token = Jwts.builder()
                 .subject(user.getEmail())
                 .claim("role", user.getRole().getId())
+                .claim("id", user.getId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
@@ -88,8 +88,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "data", user, // devolver informacion del usuario
                 "token", token,
-                "code", 200,
-                "role", user.getRole().getId()
+                "code", 200
         ));
     }
 

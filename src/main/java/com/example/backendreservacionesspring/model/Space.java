@@ -42,11 +42,17 @@ public class Space {
     private LocalDateTime updatedAt;
 
 // Relación con Schedule (1 Space → N Schedules)
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Schedule> schedules = new ArrayList<>();
+    @JoinColumn(name="space_id", nullable = false)
+    private Schedule schedule;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Reservation> reservations = new ArrayList<>();
+      // Relación con Schedule (1 Space → N Schedules)
+//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore
+//    private List<Schedule> schedules = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore
+//    private List<Reservation> reservations = new ArrayList<>();
 }

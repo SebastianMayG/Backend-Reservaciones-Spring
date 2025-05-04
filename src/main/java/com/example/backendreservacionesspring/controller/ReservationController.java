@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("api/reservations")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -55,6 +55,7 @@ public class ReservationController {
     @PostMapping
     public ApiResponse<Reservation> store(@RequestBody Reservation reservation) {
         return ApiResponse.created(reservationService.create(reservation));
+        //obtener email del user cuando se crea la reservacion
     }
 
     // GET /reservations/{id}

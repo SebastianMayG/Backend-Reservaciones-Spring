@@ -1,5 +1,6 @@
 package com.example.backendreservacionesspring.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +23,11 @@ public class Reservation {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @JsonProperty("start_time")
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
+    @JsonProperty("end_time")
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
@@ -37,10 +40,10 @@ public class Reservation {
     private LocalDateTime updateAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_space", nullable = false)
+    @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

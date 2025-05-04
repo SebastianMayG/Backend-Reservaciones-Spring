@@ -47,9 +47,9 @@ public class ScheduleSeeder {
                 .orElseThrow(() -> new IllegalArgumentException("Espacio no encontrado con ID: " + spaceId));
 
         Schedule schedule = new Schedule();
-        schedule.setStartTime(startTime);
-        schedule.setEndTime(endTime);
-        schedule.setSpace(space);
+        schedule.setStart_time(startTime);
+        schedule.setEnd_time(endTime);
+        schedule.setSpace((List<Space>) space);
 
         return schedule;
     }

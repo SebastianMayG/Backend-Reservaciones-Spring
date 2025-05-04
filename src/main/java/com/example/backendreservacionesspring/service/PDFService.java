@@ -53,7 +53,7 @@ public class PDFService {
         addInfoRow(infoTable, "Sala:", sala.getName(), normalFont);
         addInfoRow(infoTable, "Descripción:", sala.getDescription(), normalFont);
         addInfoRow(infoTable, "Capacidad:", sala.getCapacity().toString(), normalFont);
-        addInfoRow(infoTable, "Profesor:", profesor.getName() + " " + profesor.getLastName(), normalFont);
+        addInfoRow(infoTable, "Profesor:", profesor.getName() + " " + profesor.getLast_name(), normalFont);
         addInfoRow(infoTable, "Hora reservada:", reservation.getStartTime() + " - " + reservation.getEndTime(), normalFont);
 
         document.add(infoTable);
