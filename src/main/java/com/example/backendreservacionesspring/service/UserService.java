@@ -36,7 +36,7 @@ public class UserService {
     public User update(Long id, User userUpdated){
         return  userRepository.findById(id).map(user -> {
             user.setName(userUpdated.getName());
-            user.setLastName(userUpdated.getLastName());
+            user.setLast_name(userUpdated.getLast_name());
             user.setEmail(userUpdated.getEmail());
 
             return userRepository.save(user);
@@ -50,7 +50,7 @@ public class UserService {
             }
 
             if(campos.containsKey("last_name")){
-                user.setLastName((String) campos.get("last_name"));
+                user.setLast_name((String) campos.get("last_name"));
             }
 
             if(campos.containsKey("email")){

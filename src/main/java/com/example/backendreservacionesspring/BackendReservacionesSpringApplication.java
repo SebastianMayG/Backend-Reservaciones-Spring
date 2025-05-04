@@ -13,9 +13,4 @@ public class BackendReservacionesSpringApplication {
         SpringApplication.run(BackendReservacionesSpringApplication.class, args);
 
     }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }
