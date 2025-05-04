@@ -1,5 +1,6 @@
 package com.example.backendreservacionesspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -42,6 +43,10 @@ public class Space {
 
 // Relación con Schedule (1 Space → N Schedules)
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Schedule> schedules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Reservation> reservations = new ArrayList<>();
 }
