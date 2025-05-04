@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recordatorio de Reservación</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .reservation-details {
+            background: #f5f5f5;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div style="max-width: 600px; margin: 0 auto;">
+    <h1>Recordatorio de Reservación</h1>
+
+    <p th:text="'Hola ' + ${reservation.user} + ','">Hola [reservation.user],</p>
+
+    <div class="reservation-details">
+        <p th:text="'Tienes una reservación el ' + ${#temporals.format(reservation.date, 'dd/MM/yyyy')} +
+                        ' a las ' + ${#temporals.format(reservation.startTime, 'HH:mm')} + '.'">
+            Fecha y hora de reserva
+        </p>
+        <p th:if="${reservation.space != null}"
+           th:text="'Lugar: ' + ${reservation.space.name}">
+            Lugar: [Nombre del espacio]
+        </p>
+    </div>
+
+    <p>Gracias por usar nuestro servicio.</p>
+</div>
+</body>
+</html>
