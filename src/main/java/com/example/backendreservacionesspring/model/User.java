@@ -25,7 +25,7 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     @NotBlank(message = "El apellido es obligatorio")
-    private String lastName;
+    private String last_name;
 
     @Column(nullable = false)
     @NotBlank(message = "El email es obligatorio")

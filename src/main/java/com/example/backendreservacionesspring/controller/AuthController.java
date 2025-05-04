@@ -44,7 +44,22 @@ public class AuthController {
         user.setRole(defaultRole);
 
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+
+        String token = Jwts.builder()
+                .subject(savedUser.getEmail())
+                .claim("role", savedUser.getRole().getId())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
+                .signWith(generalKey())
+                .compact();
+
+        return ResponseEntity.ok(Map.of(
+                "data", savedUser, // devolver informacion del usuario
+                "token", token,
+                "code",201,
+                "role", user.getRole().getId()
+
+        ));
     }
 
     @PostMapping("/login")
@@ -64,16 +79,17 @@ public class AuthController {
 
         String token = Jwts.builder()
                 .subject(user.getEmail())
-                .claim("role", user.getRole().getDescription()) //
+                .claim("role", user.getRole().getId())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
-                .signWith(generalKey())
+                .expiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
                 .compact();
 
         return ResponseEntity.ok(Map.of(
+                "data", user, // devolver informacion del usuario
                 "token", token,
-                "mensaje", "Inicio de sesión exitoso",
-                "user", user // devolver informacin del usuario
+                "code", 200,
+                "role", user.getRole().getId()
         ));
     }
 
