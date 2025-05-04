@@ -20,5 +20,5 @@ public class Student {
     private String name;
 
     @ManyToMany(mappedBy = "students") // Mapeado por el campo en List
-    private Set<List> lists = new HashSet<>();
+    private Set<Assistance> lists = new HashSet<>();
 }

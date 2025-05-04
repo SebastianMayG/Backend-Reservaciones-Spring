@@ -11,8 +11,9 @@ import java.util.List;
 public class DataSeeder {
 
     @Bean
-    CommandLineRunner initDatabase(SpaceSeeder spaceSeeder, ScheduleSeeder scheduleSeeder) {
+    CommandLineRunner initDatabase(SpaceSeeder spaceSeeder, ScheduleSeeder scheduleSeeder, StudentSeeder studentSeeder) {
         return args -> {
+            studentSeeder.seedStudent();
             spaceSeeder.seed();
             scheduleSeeder.seedSchedules();
         };
