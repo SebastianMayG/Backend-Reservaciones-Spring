@@ -33,7 +33,7 @@ public class UserSeeder {
 
             User user = new User();
             user.setName("example");
-            user.setLastName("2");
+            user.setLast_name("2");
             user.setEmail("halo5santiago@gmail.com");
             user.setPassword(passwordEncoder.encode("root"));
             user.setRole(userRole);

@@ -4,6 +4,7 @@ import com.example.backendreservacionesspring.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.backendreservacionesspring.service.UserService;
+import com.example.backendreservacionesspring.dto.ApiResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,9 @@ public class UserController {
 
     //Obtener todos los usuarios
     @GetMapping
-    public List<User> findAllUsers() {
-        return userService.findAll();
+    public ApiResponse<List<User>> findAllUsers() {
+        List<User> users = userService.findAll();
+        return ApiResponse.success(users);
     }
 
     //Obtener un usuario por id

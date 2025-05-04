@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/spaces")
+@RequestMapping("api/spaces")
 public class SpaceController {
 
     private final SpaceService spaceService;

@@ -23,7 +23,7 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         JwtAuthenticationToken authToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.oauth2.jwt.Jwt jwt = authToken.getToken();
-        Integer roleId = jwt.getClaim("role");
+        Integer roleId = jwt.getClaim("rol");
         return List.of(new SimpleGrantedAuthority(roleId.toString()));
     }
 

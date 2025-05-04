@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    @Query(value = "SELECT * FROM schedule WHERE id_space = :spaceId", nativeQuery = true)
+    @Query(value = "SELECT * FROM schedules WHERE id_space = :spaceId", nativeQuery = true)
     List<Schedule> findSchedulesBySpaceIdNative(@Param("spaceId") Long spaceId);
 }

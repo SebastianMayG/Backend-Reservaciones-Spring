@@ -23,15 +23,20 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
+                        .anyRequest().permitAll()
+                );
+
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/login", "/api/register").permitAll()
+//                                .requestMatchers("/api/users/**").permitAll()
+//                                .requestMatchers("/api/spaces/**").permitAll()
 //                        .requestMatchers("/api/users/**").hasAuthority("1") // ID 1 = admin
 //                        .requestMatchers("/api/reservations/**").hasAnyAuthority("1", "2")
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(jwtDecoder()))
-                );
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2ResourceServer(oauth2 -> oauth2
+//                        .jwt(jwt -> jwt.decoder(jwtDecoder()))
+//                );
 
         return http.build();
     }

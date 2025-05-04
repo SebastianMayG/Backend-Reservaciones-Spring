@@ -36,8 +36,8 @@ public class ScheduleService {
 
     public Schedule update(Long id, Schedule scheduleUpdated){
         return scheduleRepository.findById(id).map(schedule -> {
-            schedule.setStartTime(scheduleUpdated.getStartTime());
-            schedule.setEndTime(scheduleUpdated.getEndTime());
+            schedule.setStart_time(scheduleUpdated.getStart_time());
+            schedule.setEnd_time(scheduleUpdated.getEnd_time());
             return scheduleRepository.save(schedule);
         }).orElseThrow(() -> new RuntimeException("Schedule not found"));
     }
@@ -45,10 +45,10 @@ public class ScheduleService {
     public Schedule updatePartial(Long id,Map<String, Object> campos){
         return scheduleRepository.findById(id).map(schedule -> {
             if(campos.containsKey("startTime")){
-                schedule.setStartTime((LocalTime) campos.get("startTime"));
+                schedule.setStart_time((LocalTime) campos.get("startTime"));
             }
             if(campos.containsKey("endTime")){
-                schedule.setEndTime((LocalTime) campos.get("endTime"));
+                schedule.setEnd_time((LocalTime) campos.get("endTime"));
             }
             return scheduleRepository.save(schedule);
         }).orElseThrow(() -> new RuntimeException("Schedule not found"));

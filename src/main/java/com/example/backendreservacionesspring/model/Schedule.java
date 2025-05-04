@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "schedules")
@@ -20,12 +22,12 @@ public class Schedule {
     private Long id;
 
     @NotNull(message = "El startTime es obligatorio")
-    @Column(nullable = false)
-    private LocalTime startTime;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime start_time;
 
     @NotNull(message = "El endTime es obligatorio")
-    @Column(nullable = false)
-    private LocalTime endTime;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime end_time;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -36,7 +38,10 @@ public class Schedule {
     private LocalDateTime updatedAt;
 
     @NotNull(message = "El espacio es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_space", nullable = false)
-    private Space space;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Space> space = new ArrayList<>();
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_space", nullable = false)
+//    private Space space;
 }
