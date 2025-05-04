@@ -49,7 +49,6 @@ public class PDFService {
         infoTable.setWidthPercentage(100);
         infoTable.setSpacingAfter(20f);
 
-        // Método auxiliar para añadir filas
         addInfoRow(infoTable, "Fecha de clase:", assistance.getDateAssistance().toLocalDate().toString(), normalFont);
         addInfoRow(infoTable, "Sala:", sala.getName(), normalFont);
         addInfoRow(infoTable, "Descripción:", sala.getDescription(), normalFont);
