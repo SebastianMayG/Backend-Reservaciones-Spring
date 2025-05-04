@@ -30,6 +30,7 @@ public class AssistanceService {
     }
 
     public Assistance save(Assistance assistance) {
+        System.out.println("Fecha recibida: " + assistance.getDateAssistance());
         // Verifica y asigna estudiantes existentes
         if (assistance.getStudents() != null) {
             Set<Student> managedStudents = new HashSet<>();

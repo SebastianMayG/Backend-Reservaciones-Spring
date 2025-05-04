@@ -22,7 +22,10 @@ public class StudentSeeder {
             List<Student> students = Arrays.asList(
                     createStudent("Maria"),
                     createStudent("Jose"),
-                    createStudent("Luis")
+                    createStudent("Luis"),
+                    createStudent("Juan Chuc"),
+                    createStudent("Gabriel Canto"),
+                    createStudent("Sebastian May")
             );
             studentRepository.saveAll(students);
             System.out.println("Estudiantes insertados: " + students.size());
@@ -32,7 +35,7 @@ public class StudentSeeder {
     private Student createStudent(String name) {
         Student student = new Student();
         student.setName(name);
-        student.setLists(new HashSet<>());
+        student.setAssistances(new HashSet<>());
         return student;
     }
 }
