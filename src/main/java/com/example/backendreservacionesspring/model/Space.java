@@ -46,4 +46,7 @@ public class Space {
     @JsonIgnore
     private List<Schedule> schedules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Reservation> reservations = new ArrayList<>();
 }

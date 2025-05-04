@@ -22,6 +22,7 @@ public class UserSeeder {
         if (userRepository.count() == 0) {
             Role adminRole = roleRepository.findById(1)
                     .orElseThrow(() -> new RuntimeException("Rol admin no encontrado"));
+            Role userRole = roleRepository.findById(2).orElseThrow(() -> new RuntimeException("Rol admin no encontrado"));;
 
             User admin = new User();
             admin.setName("Admin1");
@@ -30,7 +31,15 @@ public class UserSeeder {
             admin.setPassword(passwordEncoder.encode("root"));
             admin.setRole(adminRole);
 
+            User user = new User();
+            user.setName("example");
+            user.setLastName("2");
+            user.setEmail("halo5santiago@gmail.com");
+            user.setPassword(passwordEncoder.encode("root"));
+            user.setRole(userRole);
+
             userRepository.save(admin);
+            userRepository.save(user);
 
             System.out.println("✅ Usuario admin1@example.com creado correctamente");
         } else {

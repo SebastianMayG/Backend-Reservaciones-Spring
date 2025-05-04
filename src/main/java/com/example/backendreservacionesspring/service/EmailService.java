@@ -34,7 +34,7 @@ public class EmailService {
         Context context = new Context();
         context.setVariable("reservation", reservationDetails);
 
-        String htmlContent = templateEngine.process("email/reservation_reminder", context);
+        String htmlContent = templateEngine.process("reservation_reminder", context);
         sendEmail(toEmail, "Recordatorio de tu reservación", htmlContent);
     }*/
 

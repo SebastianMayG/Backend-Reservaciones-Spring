@@ -19,9 +19,6 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_space", nullable = false)
-    private Long idSpace;
-
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
@@ -41,5 +38,9 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_space", nullable = false)
     private Space space;
 }
