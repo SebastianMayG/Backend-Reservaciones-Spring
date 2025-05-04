@@ -40,6 +40,10 @@ public class Reservation {
     private LocalDateTime updateAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "id_space", nullable = false)
     private Space space;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 }

@@ -1,6 +1,7 @@
 package com.example.backendreservacionesspring.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,10 +17,11 @@ import java.util.Set;
 public class Assistance {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "date_assistance")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateAssistance;
 
     @Column(name = "create_at", updatable = false)
@@ -33,8 +35,13 @@ public class Assistance {
     @ManyToMany
     @JoinTable(
             name = "student_assistance",
-            joinColumns = @JoinColumn(name = "id_assistance"), // FK de List
-            inverseJoinColumns = @JoinColumn(name = "id_student") // FK de Student
+            joinColumns = @JoinColumn(name = "id_assistance"),
+            inverseJoinColumns = @JoinColumn(name = "id_student")
     )
     private Set<Student> students = new HashSet<>();
+
+    // NUEVA Relación con Reservation
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
 }

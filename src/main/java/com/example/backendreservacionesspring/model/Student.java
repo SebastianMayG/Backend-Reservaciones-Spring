@@ -1,5 +1,6 @@
 package com.example.backendreservacionesspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -20,5 +21,6 @@ public class Student {
     private String name;
 
     @ManyToMany(mappedBy = "students") // Mapeado por el campo en List
-    private Set<Assistance> lists = new HashSet<>();
+    @JsonIgnore // ← Esto evita que se serialice esta propiedad
+    private Set<Assistance> assistances = new HashSet<>();
 }
