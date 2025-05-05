@@ -1,7 +1,10 @@
 package com.example.backendreservacionesspring.model;
 
+import com.example.backendreservacionesspring.LocalTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +27,14 @@ public class Reservation {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @JsonProperty("start_time")
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @JsonProperty("end_time")
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
