@@ -1,6 +1,9 @@
 package com.example.backendreservacionesspring.model;
 
+import com.example.backendreservacionesspring.LocalTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,12 +24,16 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @NotNull(message = "El startTime es obligatorio")
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time", nullable = false, columnDefinition = "TIME(0)")
     private LocalTime start_time;
 
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @NotNull(message = "El endTime es obligatorio")
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time", nullable = false, columnDefinition = "TIME(0)")
     private LocalTime end_time;
 
     @CreationTimestamp

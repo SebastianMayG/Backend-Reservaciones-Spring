@@ -10,7 +10,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Component
 public class ScheduleSeeder {
 
@@ -29,9 +28,13 @@ public class ScheduleSeeder {
                 throw new IllegalStateException("No hay espacios disponibles. Ejecuta SpaceSeeder primero.");
             }
 
-            // Crea horarios para cada espacio
+            // Versión con LocalTime
             List<Schedule> schedules = spaces.stream()
-                    .map(space -> createSchedule(space, LocalTime.of(7, 0), LocalTime.of(17, 0)))
+                    .map(space -> createSchedule(
+                            space,
+                            LocalTime.of(7, 0),  // Hora de inicio
+                            LocalTime.of(17, 0)   // Hora de fin
+                    ))
                     .collect(Collectors.toList());
 
             scheduleRepository.saveAll(schedules);
@@ -41,9 +44,9 @@ public class ScheduleSeeder {
 
     private Schedule createSchedule(Space space, LocalTime startTime, LocalTime endTime) {
         Schedule schedule = new Schedule();
-        schedule.setStart_time(startTime);
-        schedule.setEnd_time(endTime);
-        schedule.setSpace(space);  // Asigna el espacio directamente
+        schedule.setStart_time(startTime.withSecond(0)); // Fuerza segundos a 0
+        schedule.setEnd_time(endTime.withSecond(0));     // Fuerza segundos a 0
+        schedule.setSpace(space);
         return schedule;
     }
 }
