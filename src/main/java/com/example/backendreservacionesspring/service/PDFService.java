@@ -6,14 +6,11 @@ import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.model.User;
 import com.example.backendreservacionesspring.repository.ReservationRepository;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.stream.Stream;
 
 @Service
 public class PDFService {
