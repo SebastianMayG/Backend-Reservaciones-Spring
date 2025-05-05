@@ -1,7 +1,11 @@
 package com.example.backendreservacionesspring.service;
 
 import com.example.backendreservacionesspring.model.Reservation;
+import com.example.backendreservacionesspring.model.Space;
+import com.example.backendreservacionesspring.model.User;
 import com.example.backendreservacionesspring.repository.ReservationRepository;
+import com.example.backendreservacionesspring.repository.SpaceRepository;
+import com.example.backendreservacionesspring.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -18,11 +22,15 @@ import java.util.Optional;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
+    private final SpaceRepository spaceRepository;
     private final EmailService emailService;
 
-    public ReservationService(ReservationRepository reservationRepository, EmailService emailService) {
+    public ReservationService(ReservationRepository reservationRepository, EmailService emailService, UserRepository userRepository, SpaceRepository spaceRepository) {
         this.reservationRepository = reservationRepository;
         this.emailService = emailService;
+        this.userRepository = userRepository;
+        this.spaceRepository = spaceRepository;
     }
 
     // Obtener todas las reservaciones
@@ -83,29 +91,31 @@ public class ReservationService {
 
     // Actualización parcial de una reservación
     public Reservation updatePartial(Long id, Map<String, Object> updates) {
-        return reservationRepository.findById(id)
-                .map(reservation -> {
-                    updates.forEach((key, value) -> {
-                        switch (key) {
-                            case "date":
-                                reservation.setDate((LocalDate) value);
-                                break;
-                            case "startTime":
-                                reservation.setStartTime((LocalTime) value);
-                                break;
-                            case "endTime":
-                                reservation.setEndTime((LocalTime) value);
-                                break;
-                            case "userId":
-                                // Aquí deberías buscar el User correspondiente
-                                break;
-                            case "spaceId":
-                                // Aquí deberías buscar el Space correspondiente
-                                break;
-                        }
-                    });
-                    return reservationRepository.save(reservation);
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Reservación no encontrada"));
+        return reservationRepository.findById(id).map(reservation -> {
+            updates.forEach((key, value) -> {
+                switch (key) {
+                    case "date":
+                        reservation.setDate(LocalDate.parse(value.toString()));
+                        break;
+                    case "start_time":
+                        reservation.setStartTime(LocalTime.parse(value.toString()));
+                        break;
+                    case "end_time":
+                        reservation.setEndTime(LocalTime.parse(value.toString()));
+                        break;
+                    case "space_id":
+                        Space space = spaceRepository.findById(Long.valueOf(value.toString()))
+                                .orElseThrow(() -> new EntityNotFoundException("Space not found"));
+                        reservation.setSpace(space);
+                        break;
+                    case "user_id":
+                        User user = userRepository.findById(Long.valueOf(value.toString()))
+                                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                        reservation.setUser(user);
+                        break;
+                }
+            });
+            return reservationRepository.save(reservation);
+        }).orElseThrow(() -> new EntityNotFoundException("Reservation not found"));
     }
 }
