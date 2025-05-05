@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("assistances")
+@RequestMapping("api/assistances")
 public class AssistanceController {
 
     private final AssistanceService assistanceService;
