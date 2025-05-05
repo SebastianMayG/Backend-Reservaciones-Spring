@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @Table(name ="spaces")
 @Getter @Setter
@@ -41,18 +40,5 @@ public class Space {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-// Relación con Schedule (1 Space → N Schedules)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name="space_id", nullable = false)
-    private Schedule schedule;
-
-      // Relación con Schedule (1 Space → N Schedules)
-//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonIgnore
-//    private List<Schedule> schedules = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonIgnore
-//    private List<Reservation> reservations = new ArrayList<>();
+    // Elimina todas las relaciones con Schedule aquí
 }

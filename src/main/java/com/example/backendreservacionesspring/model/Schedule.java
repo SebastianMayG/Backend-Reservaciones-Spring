@@ -38,8 +38,10 @@ public class Schedule {
     private LocalDateTime updatedAt;
 
     @NotNull(message = "El espacio es obligatorio")
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Space> space = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "space_id", nullable = false)
+    @JsonIgnore
+    private Space space;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "id_space", nullable = false)

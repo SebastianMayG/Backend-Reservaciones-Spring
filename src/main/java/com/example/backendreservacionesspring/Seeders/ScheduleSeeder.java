@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ScheduleSeeder {
@@ -23,34 +24,26 @@ public class ScheduleSeeder {
 
     public void seedSchedules() {
         if (scheduleRepository.count() == 0) {
-            // Verifica que los espacios existan
             List<Space> spaces = spaceRepository.findAll();
             if (spaces.isEmpty()) {
                 throw new IllegalStateException("No hay espacios disponibles. Ejecuta SpaceSeeder primero.");
             }
 
-            List<Schedule> schedules = Arrays.asList(
-                    createSchedule(1, LocalTime.of(7, 0), LocalTime.of(17, 0)),
-                    createSchedule(2, LocalTime.of(7, 0), LocalTime.of(17, 0)),
-                    createSchedule(3, LocalTime.of(7, 0), LocalTime.of(17, 0)),
-                    createSchedule(4, LocalTime.of(7, 0), LocalTime.of(17, 0)),
-                    createSchedule(5, LocalTime.of(7, 0), LocalTime.of(17, 0))
-            );
+            // Crea horarios para cada espacio
+            List<Schedule> schedules = spaces.stream()
+                    .map(space -> createSchedule(space, LocalTime.of(7, 0), LocalTime.of(17, 0)))
+                    .collect(Collectors.toList());
 
             scheduleRepository.saveAll(schedules);
             System.out.println("Seeders de horarios ejecutados correctamente");
         }
     }
 
-    private Schedule createSchedule(long spaceId, LocalTime startTime, LocalTime endTime) {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new IllegalArgumentException("Espacio no encontrado con ID: " + spaceId));
-
+    private Schedule createSchedule(Space space, LocalTime startTime, LocalTime endTime) {
         Schedule schedule = new Schedule();
         schedule.setStart_time(startTime);
         schedule.setEnd_time(endTime);
-        schedule.setSpace((List<Space>) space);
-
+        schedule.setSpace(space);  // Asigna el espacio directamente
         return schedule;
     }
 }
