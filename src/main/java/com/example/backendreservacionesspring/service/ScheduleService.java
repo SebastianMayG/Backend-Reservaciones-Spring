@@ -3,6 +3,7 @@ package com.example.backendreservacionesspring.service;
 import com.example.backendreservacionesspring.model.Schedule;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.repository.ScheduleRepository;
+import com.example.backendreservacionesspring.repository.ScheduleWithSpaceId;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,14 @@ public class ScheduleService {
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
+    // Nuevo método para obtener datos con space_id
+    public List<ScheduleWithSpaceId> findAllWithSpaceId() {
+        return scheduleRepository.findAllWithSpaceId();
+    }
 
+    public List<ScheduleWithSpaceId> findBySpaceId(Long spaceId) {
+        return scheduleRepository.findSchedulesBySpaceId(spaceId);
+    }
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();
     }
@@ -30,9 +38,9 @@ public class ScheduleService {
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
     }
-    public List<Schedule> findBySpaceId(Long spaceId) {
-        return scheduleRepository.findSchedulesBySpaceIdNative(spaceId);
-    }
+//    public List<Schedule> findBySpaceId(Long spaceId) {
+//        return scheduleRepository.findSchedulesBySpaceIdNative(spaceId);
+//    }
 
     public Schedule update(Long id, Schedule scheduleUpdated){
         return scheduleRepository.findById(id).map(schedule -> {
