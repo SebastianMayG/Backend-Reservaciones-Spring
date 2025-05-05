@@ -2,6 +2,8 @@ package com.example.backendreservacionesspring.controller;
 
 import com.example.backendreservacionesspring.dto.ApiResponse;
 import com.example.backendreservacionesspring.model.Reservation;
+import com.example.backendreservacionesspring.model.Space;
+import com.example.backendreservacionesspring.model.User;
 import com.example.backendreservacionesspring.service.ReservationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +56,31 @@ public class ReservationController {
 
     // POST /reservations
     @PostMapping
-    public ApiResponse<Reservation> store(@RequestBody Reservation reservation) {
+    public ApiResponse<Reservation> store(@RequestBody Map<String, Object> requestData) {
+        //FALTA EN ENVIADO DEL EMAIL
+        // Extrae los datos del mapa
+        Long spaceId = Long.valueOf(requestData.get("space_id").toString());
+        Long userId = Long.valueOf(requestData.get("user_id").toString());
+        LocalDate date = LocalDate.parse(requestData.get("date").toString());
+        LocalTime startTime = LocalTime.parse(requestData.get("start_time").toString());
+        LocalTime endTime = LocalTime.parse(requestData.get("end_time").toString());
+
+        // Crea la reservación
+        Reservation reservation = new Reservation();
+        reservation.setDate(date);
+        reservation.setStartTime(startTime);
+        reservation.setEndTime(endTime);
+
+        // Asigna las relaciones (solo necesitamos los IDs)
+        Space space = new Space();
+        space.setId(spaceId);
+        reservation.setSpace(space);
+
+        User user = new User();
+        user.setId(userId);
+        reservation.setUser(user);
+
         return ApiResponse.created(reservationService.create(reservation));
-        //obtener email del user cuando se crea la reservacion
     }
 
     // GET /reservations/{id}

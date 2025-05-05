@@ -1,5 +1,6 @@
 package com.example.backendreservacionesspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,9 +42,22 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "space_id", nullable = false)
+    @JsonIgnore
     private Space space;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
+
+    // Campos adicionales para los IDs
+    @Transient
+    public Long getSpace_id() {
+        return space != null ? space.getId() : null;
+    }
+
+    @Transient
+    public Long getUser_id() {
+        return user != null ? user.getId() : null;
+    }
 }
