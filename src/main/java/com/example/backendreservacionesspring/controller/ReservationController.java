@@ -10,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -108,9 +110,18 @@ public class ReservationController {
 
     // PATCH /reservations/{id}
     @PatchMapping("/{id}")
-    public ApiResponse<Reservation> updatePartial(
+    public ResponseEntity<?> updatePartial(
             @PathVariable Long id,
             @RequestBody Map<String, Object> updates) {
-        return ApiResponse.success(reservationService.updatePartial(id, updates));
+        try {
+            Reservation updated = reservationService.updatePartial(id, updates);
+            return ResponseEntity.ok(updated);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Formato de fecha/hora inválido");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al actualizar reservación");
+        }
     }
 }
