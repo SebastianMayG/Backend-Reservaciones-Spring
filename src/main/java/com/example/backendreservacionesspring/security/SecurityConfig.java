@@ -12,40 +12,41 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
     private static final String SECRET_KEY = "mWQKjKflpJSqyj0nDdSG9ZHE6x4tNaXGb35J6d7G5mo=";
+    private final TokenBlackList tokenBlackList;
+
+    public SecurityConfig(TokenBlackList tokenBlackList) {
+        this.tokenBlackList = tokenBlackList;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new JwtTokenFilter(tokenBlackList),
+                        UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/login", "/api/register").permitAll()
+                        .requestMatchers("/api/users/**").hasAuthority("1")
+                        .requestMatchers("/api/spaces/**","/api/reservations/**", "/api/schedules/**").hasAnyAuthority("1", "2")
+                        .anyRequest().authenticated()
                 );
 
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/login", "/api/register").permitAll()
-//                                .requestMatchers("/api/users/**").permitAll()
-//                                .requestMatchers("/api/spaces/**").permitAll()
-//                        .requestMatchers("/api/users/**").hasAuthority("1") // ID 1 = admin
-//                        .requestMatchers("/api/reservations/**").hasAnyAuthority("1", "2")
-//                        .anyRequest().authenticated()
-//                )
-//                .oauth2ResourceServer(oauth2 -> oauth2
-//                        .jwt(jwt -> jwt.decoder(jwtDecoder()))
-//                );
-
         return http.build();
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withSecretKey(
-                Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY))
-        ).build();
     }
 
     @Bean

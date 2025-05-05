@@ -5,6 +5,7 @@ import com.example.backendreservacionesspring.repository.UserRepository;
 import com.example.backendreservacionesspring.model.Role;
 import com.example.backendreservacionesspring.repository.RoleRepository;
 
+import com.example.backendreservacionesspring.security.TokenBlackList;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,11 +26,13 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private static final String SECRET_KEY = "mWQKjKflpJSqyj0nDdSG9ZHE6x4tNaXGb35J6d7G5mo=";
+    private final TokenBlackList tokenBlackList;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, TokenBlackList tokenBlackList) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.tokenBlackList = tokenBlackList;
     }
 
     @PostMapping("/register")
@@ -48,7 +51,7 @@ public class AuthController {
         String token = Jwts.builder()
                 .subject(savedUser.getEmail())
                 .claim("role", savedUser.getRole().getId())
-                .claim("userId", savedUser.getId())
+                .claim("id", savedUser.getId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
                 .signWith(generalKey())
@@ -93,9 +96,27 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok(Map.of("mensaje", "Token eliminado en frontend"));
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+        try {
+            // Obtener el token del header
+            String token = authHeader.startsWith("Bearer ") ?
+                    authHeader.substring(7) : authHeader;
+
+            // Agregar el token a la lista negra
+            tokenBlackList.addToBlacklist(token);
+
+            return ResponseEntity.ok(Map.of(
+                    "mensaje", "Sesión cerrada exitosamente",
+                    "code", 200
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of(
+                    "mensaje", "Error al cerrar sesión",
+                    "code", 500
+            ));
+        }
     }
+
 
     private SecretKey generalKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);

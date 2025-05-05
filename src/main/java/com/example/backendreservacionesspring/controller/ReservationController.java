@@ -5,6 +5,12 @@ import com.example.backendreservacionesspring.model.Reservation;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.model.User;
 import com.example.backendreservacionesspring.service.ReservationService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import org.springframework.web.bind.annotation.RequestHeader;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,9 +43,37 @@ public class ReservationController {
 
     // GET /reservations/user
     @GetMapping("/user")
-    public ApiResponse<List<Reservation>> userReservations() {
-        //Long userId = Long.parseLong(userDetails.getUsername());
-        return ApiResponse.success(reservationService.findByUserId(2L));
+    public ApiResponse<List<Reservation>> userReservations(@RequestHeader("Authorization") String authHeader) {
+        // Obtener el token sin el prefijo "Bearer "
+        String token = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : authHeader;
+
+        try {
+            // Decodificar el token
+            SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode("mWQKjKflpJSqyj0nDdSG9ZHE6x4tNaXGb35J6d7G5mo="));
+            Claims claims = Jwts
+                    .parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            // Imprimir todas las claims para depuración
+            System.out.println("Todas las claims: " + claims.toString());
+            System.out.println("UserId from token: " + claims.get("id", Integer.class));
+
+            // Cambiar "userId" por "id"
+            Long userId = claims.get("id", Integer.class).longValue();
+            System.out.println("UserId convertido a Long: " + userId);
+
+            List<Reservation> reservations = reservationService.findByUserId(userId);
+            System.out.println("Número de reservaciones encontradas: " + reservations.size());
+
+            return ApiResponse.success(reservations);
+        } catch (Exception e) {
+            System.out.println("Error al procesar el token: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     // GET /reservations/{date}/{space_id}
