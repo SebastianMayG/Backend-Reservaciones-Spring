@@ -1,6 +1,5 @@
 package com.example.backendreservacionesspring.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class Signature {
 
     @Column (name = "name", nullable = false)
     @NotBlank(message = "Nombre de la asignatura obligatorio")
-    private String nombre;
+    private String name;
 
     @Column(name = "create_at", updatable = false)
     @CreationTimestamp

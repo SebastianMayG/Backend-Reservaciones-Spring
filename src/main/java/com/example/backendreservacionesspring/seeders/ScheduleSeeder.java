@@ -1,4 +1,4 @@
-package com.example.backendreservacionesspring.Seeders;
+package com.example.backendreservacionesspring.seeders;
 
 import com.example.backendreservacionesspring.model.Schedule;
 import com.example.backendreservacionesspring.model.Space;
@@ -7,7 +7,6 @@ import com.example.backendreservacionesspring.repository.SpaceRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 @Component

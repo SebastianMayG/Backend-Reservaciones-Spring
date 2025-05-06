@@ -1,4 +1,4 @@
-package com.example.backendreservacionesspring.Seeders;
+package com.example.backendreservacionesspring.seeders;
 
 import com.example.backendreservacionesspring.model.Role;
 import com.example.backendreservacionesspring.repository.RoleRepository;
