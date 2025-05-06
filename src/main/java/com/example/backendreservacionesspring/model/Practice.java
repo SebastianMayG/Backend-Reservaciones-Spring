@@ -1,5 +1,6 @@
 package com.example.backendreservacionesspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -35,5 +36,6 @@ public class Practice {
 
     @ManyToOne
     @JoinColumn(name = "id_asignatura", nullable = false)
+    @JsonIgnore
     private Signature signature;
 }

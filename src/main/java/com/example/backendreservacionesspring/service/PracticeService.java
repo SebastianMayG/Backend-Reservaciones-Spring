@@ -2,6 +2,7 @@ package com.example.backendreservacionesspring.service;
 
 import com.example.backendreservacionesspring.model.Practice;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.example.backendreservacionesspring.repository.PracticeRepository;
 
@@ -68,5 +69,23 @@ public class PracticeService {
     // Método adicional para buscar prácticas por asignatura
     public List<Practice> findBySignatureId(Long signatureId) {
         return practiceRepository.findBySignatureId(signatureId);
+    }
+
+    @Transactional
+    public Practice save(Practice practice) {
+        // Validaciones básicas
+        if (practice.getName() == null || practice.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la práctica no puede estar vacío");
+        }
+
+        if (practice.getUrl() == null || practice.getUrl().trim().isEmpty()) {
+            throw new IllegalArgumentException("La URL de la práctica no puede estar vacía");
+        }
+
+        if (practice.getSignature() == null || practice.getSignature().getId() == null) {
+            throw new IllegalArgumentException("La práctica debe estar asociada a una asignatura válida");
+        }
+
+        return practiceRepository.save(practice);
     }
 }
