@@ -12,10 +12,14 @@ public class DataSeeder {
                                    ScheduleSeeder scheduleSeeder,
                                    StudentSeeder studentSeeder,
                                    SignatureSeeder signatureSeeder,
-                                   PracticeSeeder practiceSeeder) {
+                                   PracticeSeeder practiceSeeder,
+                                   UserSeeder userSeeder,
+                                   RoleSeeder roleSeeder) {
         return args -> {
             signatureSeeder.seedSignatures();
             studentSeeder.seedStudent();
+            roleSeeder.seedRoles();
+            userSeeder.seedUsers();
             spaceSeeder.seed();
             scheduleSeeder.seedSchedules();
             practiceSeeder.seedPractices();
