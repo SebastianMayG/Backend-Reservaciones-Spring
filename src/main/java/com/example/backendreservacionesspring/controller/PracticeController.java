@@ -2,6 +2,7 @@ package com.example.backendreservacionesspring.controller;
 
 import com.example.backendreservacionesspring.model.Practice;
 import com.example.backendreservacionesspring.service.PracticeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class PracticeController {
     }
 
     @PostMapping
-    public ResponseEntity<Practice> createPractice(@RequestBody Practice practice) {
+    public ResponseEntity<Practice> createPractice(@Valid @RequestBody Practice practice) {
         Practice savedPractice = practiceService.savePractice(practice);
         return ResponseEntity.created(URI.create("/api/practices/" + savedPractice.getId()))
                 .body(savedPractice);

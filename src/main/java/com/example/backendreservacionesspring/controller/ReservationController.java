@@ -10,6 +10,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
+
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestHeader;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -90,10 +92,9 @@ public class ReservationController {
         return ApiResponse.success(reservationService.findAllPaginated());
     }
 
-    // POST /reservations
+     //POST /reservations
     @PostMapping
-    public ApiResponse<Reservation> store(@RequestBody Map<String, Object> requestData) {
-        //FALTA EN ENVIADO DEL EMAIL
+    public ApiResponse<Reservation> store(@Valid @RequestBody Map<String, Object> requestData) {
         // Extrae los datos del mapa
         Long spaceId = Long.valueOf(requestData.get("space_id").toString());
         Long userId = Long.valueOf(requestData.get("user_id").toString());
@@ -118,7 +119,6 @@ public class ReservationController {
 
         return ApiResponse.created(reservationService.create(reservation));
     }
-
     // GET /reservations/{id}
     @GetMapping("/{id}")
     public ApiResponse<Reservation> show(@PathVariable Long id) {

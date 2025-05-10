@@ -31,7 +31,7 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ApiResponse<Schedule> createSchedule(@RequestBody Map<String, Object> requestData){
+    public ApiResponse<Schedule> createSchedule(@Valid @RequestBody Map<String, Object> requestData){
         long spaceId;
         spaceId = ((Number) requestData.get("space_id")).longValue();
         Space space = spaceService.findSpaceById(spaceId)
