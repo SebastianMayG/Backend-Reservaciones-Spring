@@ -1,5 +1,7 @@
 package com.example.backendreservacionesspring.service;
 
+import com.example.backendreservacionesspring.model.Reservation;
+import com.example.backendreservacionesspring.model.User;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -23,20 +25,19 @@ public class EmailService {
 
     public void sendVerificationEmail(String toEmail) {
         Context context = new Context();
-//        context.setVariable("name", name);
-//        context.setVariable("verificationLink", verificationLink);
 
         String htmlContent = templateEngine.process("verification", context);
         sendEmail(toEmail, "Verifica tu reservación", htmlContent);
     }
 
-    /*public void sendReservationReminder(String toEmail, ReservationDetailsDto reservationDetails) {
+    public void sendReservationReminder(String toEmail, Reservation reservation, User user) {
         Context context = new Context();
-        context.setVariable("reservation", reservationDetails);
+        context.setVariable("reservation", reservation);
+        context.setVariable("user", user);
 
         String htmlContent = templateEngine.process("reservation_reminder", context);
-        sendEmail(toEmail, "Recordatorio de tu reservación", htmlContent);
-    }*/
+        sendEmail(toEmail, "Recordatorio: Tu reservación es mañana", htmlContent);
+    }
 
     private void sendEmail(String to, String subject, String htmlContent) {
         try {

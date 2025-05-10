@@ -32,8 +32,8 @@ public class UserSeeder {
             admin.setRole(adminRole);
 
             User user = new User();
-            user.setName("example");
-            user.setLast_name("2");
+            user.setName("Santiago");
+            user.setLast_name("May");
             user.setEmail("halo5santiago@gmail.com");
             user.setPassword(passwordEncoder.encode("root"));
             user.setRole(userRole);

@@ -41,5 +41,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "LEFT JOIN FETCH r.user " +       // Carga los datos del profesor
             "WHERE r.id = :id")
     Optional<Reservation> findByIdWithRelations(@Param("id") Long id);
+
+    @Query("SELECT r FROM Reservation r WHERE r.date = :date " +
+            "AND r.startTime BETWEEN :startTime AND :endTime " +
+            "AND r.reminderSent = false")
+    List<Reservation> findByDateAndStartTimeBetween(
+            @Param("date") LocalDate date,
+            @Param("startTime") LocalTime startTime,
+            @Param("endTime") LocalTime timeEnd);
+
 }
 

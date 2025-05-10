@@ -47,6 +47,12 @@ public class Reservation {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    @Column(name = "reminder_sent", columnDefinition = "boolean default false")
+    private boolean reminderSent = false;
+
+    @Column(name = "reminder_sent_at")
+    private LocalDateTime reminderSentAt;
+
     @ManyToOne
     @JoinColumn(name = "space_id", nullable = false)
     @JsonIgnore
