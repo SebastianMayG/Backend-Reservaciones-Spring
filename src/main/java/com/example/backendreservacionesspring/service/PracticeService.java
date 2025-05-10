@@ -1,6 +1,8 @@
 package com.example.backendreservacionesspring.service;
 
 import com.example.backendreservacionesspring.model.Practice;
+import com.example.backendreservacionesspring.model.Signature;
+import com.example.backendreservacionesspring.repository.SignatureRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class PracticeService {
     private final PracticeRepository practiceRepository;
+    private final SignatureRepository signatureRepository;
 
-    public PracticeService(PracticeRepository practiceRepository) {
+    public PracticeService(PracticeRepository practiceRepository, SignatureRepository signatureRepository) {
         this.practiceRepository = practiceRepository;
+        this.signatureRepository = signatureRepository;
     }
 
     public List<Practice> findAll() {
@@ -27,6 +31,26 @@ public class PracticeService {
     }
 
     public Practice savePractice(Practice practice) {
+        // Verifica que la signature tenga ID
+        if (practice.getSignature() == null || practice.getSignature().getId() == null) {
+            throw new IllegalArgumentException("Debe especificar una asignatura válida");
+        }
+
+        // Busca la signature completa en la base de datos
+        Signature managedSignature = signatureRepository.findById(practice.getSignature().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Signature no encontrada con id: " + practice.getSignature().getId()));
+
+        // Asigna la signature gestionada por JPA
+        practice.setSignature(managedSignature);
+
+        // Validaciones adicionales
+        if (practice.getName() == null || practice.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+        if (practice.getUrl() == null || practice.getUrl().trim().isEmpty()) {
+            throw new IllegalArgumentException("La URL no puede estar vacía");
+        }
+
         return practiceRepository.save(practice);
     }
 

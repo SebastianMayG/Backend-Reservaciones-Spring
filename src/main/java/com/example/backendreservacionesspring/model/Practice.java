@@ -1,6 +1,9 @@
 package com.example.backendreservacionesspring.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -35,7 +38,8 @@ public class Practice {
     private LocalDateTime updateAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_asignatura", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "id_signature", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true) // Para operaciones de escritura (POST/PUT)
     private Signature signature;
 }
