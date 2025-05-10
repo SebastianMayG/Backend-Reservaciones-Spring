@@ -1,27 +1,37 @@
+
 package com.example.backendreservacionesspring.seeders;
 
 import com.example.backendreservacionesspring.model.Role;
 import com.example.backendreservacionesspring.repository.RoleRepository;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
-@RequiredArgsConstructor
 public class RoleSeeder {
 
-    private final RoleRepository roleRepo;
+    private final RoleRepository roleRepository;
 
-    @PostConstruct
-    public void init() {
-        if (roleRepo.count() == 0) {
-            Role adminRole = new Role();
-            adminRole.setDescription("admin");
-            roleRepo.save(adminRole);
+    public RoleSeeder(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
-            Role userRole = new Role();
-            userRole.setDescription("user");
-            roleRepo.save(userRole);
+    public void seedRoles() {
+        if (roleRepository.count() == 0) {
+            List<Role> roles = Arrays.asList(
+                    createRole("admin"),
+                    createRole("user")
+            );
+
+            roleRepository.saveAll(roles);
+            System.out.println("✅ Roles insertados: " + roles.size());
         }
+    }
+
+    private Role createRole(String description) {
+        Role role = new Role();
+        role.setDescription(description);
+        return role;
     }
 }
