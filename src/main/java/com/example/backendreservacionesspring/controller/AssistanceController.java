@@ -6,6 +6,7 @@ import com.example.backendreservacionesspring.service.PDFService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.itextpdf.text.DocumentException;
+import jakarta.validation.Valid;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class AssistanceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAssistance(@RequestBody Assistance assistance) {
+    public ResponseEntity<?> createAssistance(@Valid @RequestBody Assistance assistance) {
         try {
             Assistance savedAssistance = assistanceService.save(assistance);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedAssistance);
