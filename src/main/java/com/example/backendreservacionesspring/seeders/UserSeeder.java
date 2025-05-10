@@ -35,6 +35,8 @@ public class UserSeeder {
 
             List<User> users = Arrays.asList(
                     createUser("Admin1", "Admin1", "admin1@example.com", adminRole),
+                    createUser("Admin2", "Admin2", "admin2@example.com", adminRole),
+                    createUser("Admin3", "Admin23", "admin3@example.com", adminRole),
                     createUser("Santiago", "May", "halo5santiago@gmail.com", userRole)
             );
 
