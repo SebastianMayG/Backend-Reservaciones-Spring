@@ -53,7 +53,8 @@ public class ReservationService {
     public Reservation create(Reservation reservation) {
         Reservation savedReservation = reservationRepository.save(reservation);
         // Enviar email de confirmación
-        //emailService.sendVerificationEmail(savedReservation.getUser().getEmail());
+        User user = userRepository.findById(reservation.getUser().getId()).orElseThrow(EntityNotFoundException::new);
+        emailService.sendVerificationEmail(user.getEmail());
         return savedReservation;
     }
 

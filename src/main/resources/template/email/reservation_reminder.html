@@ -17,20 +17,24 @@
 <div style="max-width: 600px; margin: 0 auto;">
     <h1>Recordatorio de Reservación</h1>
 
-    <p th:text="'Hola ' + ${reservation.user} + ','">Hola [reservation.user],</p>
+    <p th:text="'Hola ' + ${user.name} + ','">Hola [Nombre],</p>
 
     <div class="reservation-details">
-        <p th:text="'Tienes una reservación el ' + ${#temporals.format(reservation.date, 'dd/MM/yyyy')} +
-                        ' a las ' + ${#temporals.format(reservation.startTime, 'HH:mm')} + '.'">
+        <p th:text="'Tienes una reservación mañana (' + ${#temporals.format(reservation.date, 'dd/MM/yyyy')} +
+                    ') a las ' + ${#temporals.format(reservation.startTime, 'HH:mm')} + ' hrs.'">
             Fecha y hora de reserva
         </p>
-        <p th:if="${reservation.space != null}"
-           th:text="'Lugar: ' + ${reservation.space.name}">
+        <p th:text="'Lugar: ' + ${reservation.space.name}">
             Lugar: [Nombre del espacio]
+        </p>
+        <p th:text="'Duración: ' + ${#temporals.format(reservation.startTime, 'HH:mm')} +
+                    ' - ' + ${#temporals.format(reservation.endTime, 'HH:mm')}">
+            Duración: [Horario]
         </p>
     </div>
 
-    <p>Gracias por usar nuestro servicio.</p>
+    <p>¡Te esperamos!</p>
+    <p>Equipo de Reservaciones</p>
 </div>
 </body>
 </html>
