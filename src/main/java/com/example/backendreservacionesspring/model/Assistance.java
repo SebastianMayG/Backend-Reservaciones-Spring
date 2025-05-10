@@ -41,7 +41,7 @@ public class Assistance {
     private Set<Student> students = new HashSet<>();
 
     // NUEVA Relación con Reservation
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 }
