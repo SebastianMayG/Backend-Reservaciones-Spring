@@ -2,28 +2,28 @@ package com.example.backendreservacionesspring.seeders;
 
 import com.example.backendreservacionesspring.model.Practice;
 import com.example.backendreservacionesspring.model.Signature;
-import com.example.backendreservacionesspring.service.PracticeService;
+import com.example.backendreservacionesspring.repository.PracticeRepository;
 import com.example.backendreservacionesspring.service.SignatureService;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PracticeSeeder {
 
-    private final PracticeService practiceService;
+    private final PracticeRepository practiceRepository;
     private final SignatureService signatureService;
 
-    public PracticeSeeder(PracticeService practiceService, SignatureService signatureService) {
-        this.practiceService = practiceService;
+    public PracticeSeeder(PracticeRepository practiceRepository, SignatureService signatureService) {
+        this.practiceRepository = practiceRepository;
         this.signatureService = signatureService;
     }
 
-    public void seedPractices() {
-        // Verificar si ya existen prácticas (asumiendo que tienes este método)
-        if (practiceService.findAll().isEmpty()) {
-            // Obtener todas las asignaturas existentes
+    public void seed() {
+        if (practiceRepository.count() == 0) {
             List<Signature> signatures = signatureService.findAll();
+            List<Practice> practices = new ArrayList<>();
 
             if (!signatures.isEmpty()) {
                 // Crear prácticas para la primera asignatura
@@ -32,8 +32,12 @@ public class PracticeSeeder {
                         .findFirst()
                         .orElse(signatures.get(0));
 
-                createPractice("Aplicacion Java Web con Spring", "https://drive.google.com/file/d/1VjEvzCrGE-WUCJ6uqxItjJTGhgFrWsSs/view?usp=sharing", math);
-                createPractice("Aplicación Java Web usando estructura básica", "https://drive.google.com/file/d/1VjEvzCrGE-WUCJ6uqxItjJTGhgFrWsSs/view?usp=sharing", math);
+                practices.add(createPractice("Aplicacion Java Web con Spring", 
+                    "https://drive.google.com/file/d/1VjEvzCrGE-WUCJ6uqxItjJTGhgFrWsSs/view?usp=sharing", 
+                    math));
+                practices.add(createPractice("Aplicación Java Web usando estructura básica", 
+                    "https://drive.google.com/file/d/1VjEvzCrGE-WUCJ6uqxItjJTGhgFrWsSs/view?usp=sharing", 
+                    math));
 
                 // Crear prácticas para la segunda asignatura (si existe)
                 if (signatures.size() > 1) {
@@ -42,21 +46,25 @@ public class PracticeSeeder {
                             .findFirst()
                             .orElse(signatures.get(1));
 
-                    createPractice("Análisis de Texto", "https://lengua.com/analisis", language);
-                    createPractice("Gramática Avanzada", "https://lengua.com/gramatica", language);
+                    practices.add(createPractice("Análisis de Texto", 
+                        "https://lengua.com/analisis", 
+                        language));
+                    practices.add(createPractice("Gramática Avanzada", 
+                        "https://lengua.com/gramatica", 
+                        language));
                 }
 
-                System.out.println("Seeder ejecutado: " + practiceService.findAll().size() + " prácticas creadas.");
+                practiceRepository.saveAll(practices);
+                System.out.println("✅ Prácticas insertadas: " + practices.size());
             }
         }
     }
 
-    public Practice createPractice(String name, String url, Signature signature) {
+    private Practice createPractice(String name, String url, Signature signature) {
         Practice practice = new Practice();
         practice.setName(name);
         practice.setUrl(url);
         practice.setSignature(signature);
-
-        return practiceService.save(practice);
+        return practice;
     }
 }

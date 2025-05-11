@@ -17,14 +17,16 @@ public class SignatureSeeder {
     }
 
     public void seedSignatures() {
-        List<Signature> signatures = Arrays.asList(
-                createSignature("Programacion Web"),
-                createSignature("Lengua y Literatura"),
-                createSignature("Historia")
-        );
+        if (signatureRepository.count() == 0) {
+            List<Signature> signatures = Arrays.asList(
+                    createSignature("Programacion Web"),
+                    createSignature("Lengua y Literatura"),
+                    createSignature("Historia")
+            );
 
-        signatureRepository.saveAll(signatures);
-        System.out.println("Seeder ejecutado: " + signatures.size() + " asignaturas creadas.");
+            signatureRepository.saveAll(signatures);
+            System.out.println("Seeder ejecutado: " + signatures.size() + " asignaturas creadas.");
+        }
     }
 
     private Signature createSignature(String name) {

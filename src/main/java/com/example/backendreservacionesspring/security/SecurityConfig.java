@@ -41,8 +41,18 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/register").permitAll()
-                        .requestMatchers("/api/users/**").hasAuthority("1")
-                        .requestMatchers("/api/spaces/**","/api/reservations/**", "/api/schedules/**").hasAnyAuthority("1", "2")
+                        .requestMatchers(
+                                "/api/users/**",
+                                "/api/assistance/**",
+                                "/api/students/**",
+                                "/api/signatures/**"
+                        ).hasAuthority("1")
+                        .requestMatchers(
+                                "/api/spaces/**",
+                                "/api/reservations/**",
+                                "/api/schedules/**",
+                                "/api/practices/**"
+                        ).hasAnyAuthority("1", "2")
                         .anyRequest().authenticated()
                 );
 

@@ -22,7 +22,7 @@ public class DataSeeder {
             userSeeder.seedUsers();
             spaceSeeder.seed();
             scheduleSeeder.seedSchedules();
-            practiceSeeder.seedPractices();
+            practiceSeeder.seed();
         };
     }
 }
