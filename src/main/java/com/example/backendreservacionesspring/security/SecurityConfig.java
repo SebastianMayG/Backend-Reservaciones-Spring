@@ -44,14 +44,15 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/**",
                                 "/api/assistance/**",
-                                "/api/students/**",
-                                "/api/signatures/**"
+                                "/api/students/**"
+
                         ).hasAuthority("1")
                         .requestMatchers(
                                 "/api/spaces/**",
                                 "/api/reservations/**",
                                 "/api/schedules/**",
-                                "/api/practices/**"
+                                "/api/practices/**",
+                                "/api/signatures/**"
                         ).hasAnyAuthority("1", "2")
                         .anyRequest().authenticated()
                 );
