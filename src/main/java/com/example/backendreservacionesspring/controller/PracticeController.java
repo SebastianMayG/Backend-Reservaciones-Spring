@@ -5,11 +5,13 @@ import com.example.backendreservacionesspring.model.Signature;
 import com.example.backendreservacionesspring.repository.SignatureRepository;
 import com.example.backendreservacionesspring.service.PracticeService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -129,12 +131,21 @@ public class PracticeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePractice(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> deletePractice(@PathVariable Long id) {
         if (!practiceService.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", HttpStatus.NOT_FOUND.value());
+            errorResponse.put("message", "No se encontró la práctica con ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
         practiceService.deleteById(id);
-        return ResponseEntity.noContent().build();
+
+        Map<String, Object> successResponse = new HashMap<>();
+        successResponse.put("status", HttpStatus.OK.value());
+        successResponse.put("message", "Práctica eliminada exitosamente");
+        successResponse.put("deletedId", id);
+
+        return ResponseEntity.ok(successResponse);
     }
 }

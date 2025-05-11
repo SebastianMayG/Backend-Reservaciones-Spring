@@ -1,16 +1,22 @@
 package com.example.backendreservacionesspring.controller;
 
 import com.example.backendreservacionesspring.model.Assistance;
+import com.example.backendreservacionesspring.model.Reservation;
 import com.example.backendreservacionesspring.service.AssistanceService;
+import com.example.backendreservacionesspring.service.ExcelService;
 import com.example.backendreservacionesspring.service.PDFService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.itextpdf.text.DocumentException;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +28,12 @@ public class AssistanceController {
 
     private final AssistanceService assistanceService;
     private final PDFService pdfService;
+    private final ExcelService excelService;
 
-    public AssistanceController(AssistanceService assistanceService, PDFService pdfService) {
+    public AssistanceController(AssistanceService assistanceService, PDFService pdfService, ExcelService excelService) {
         this.assistanceService = assistanceService;
         this.pdfService = pdfService;
+        this.excelService = excelService;
     }
 
     @GetMapping
@@ -123,6 +131,36 @@ public class AssistanceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(errorResponse);
+        }
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadAssistance(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("reservationId") Long reservationId,
+            @RequestParam("dateAssistance") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateAssistance) {
+
+        try {
+            List<Long> studentIds = excelService.extractStudentIdsFromCsv(file);
+            Reservation reservation = new Reservation();
+            reservation.setId(reservationId);
+
+            // Línea clave: Asegúrate de que registerAssistance retorne el ID.
+            Long assistanceId = excelService.registerAssistance(dateAssistance, studentIds, reservation);
+
+            // Respuesta JSON manual (como antes, pero ahora incluyendo assistanceId)
+            String jsonResponse = String.format(
+                    "{\"success\": true, \"message\": \"Asistencia registrada para %d estudiantes.\", \"students\": %s, \"assistanceId\": %d}",
+                    studentIds.size(),
+                    new ObjectMapper().writeValueAsString(studentIds),
+                    assistanceId
+            );
+
+            return ResponseEntity.ok().body(jsonResponse);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("{\"success\": false, \"message\": \"Error al procesar el archivo.\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
         }
     }
 }
