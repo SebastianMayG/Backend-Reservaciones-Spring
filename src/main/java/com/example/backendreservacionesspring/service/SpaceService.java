@@ -1,9 +1,10 @@
 package com.example.backendreservacionesspring.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import com.example.backendreservacionesspring.model.Space;
 import com.example.backendreservacionesspring.repository.SpaceRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -11,53 +12,65 @@ import java.util.Optional;
 
 @Service
 public class SpaceService {
-    private SpaceRepository spaceRepository;
+    private final SpaceRepository spaceRepository;
 
     public SpaceService(SpaceRepository spaceRepository) {
         this.spaceRepository = spaceRepository;
     }
 
-    public List<Space> findAll(){
+    @Transactional(readOnly = true)
+    public List<Space> findAll() {
         return spaceRepository.findAll();
     }
 
-    public Optional<Space> findSpaceById(Long id){
+    @Transactional(readOnly = true)
+    public Optional<Space> findSpaceById(Long id) {
+        // Limpiar el caché de Hibernate antes de buscar
+        spaceRepository.flush();
         return spaceRepository.findById(id);
     }
 
-    public Space saveSpace (Space space){
+    @Transactional
+    public Space saveSpace(Space space) {
         return spaceRepository.save(space);
     }
 
-    public Space update (Long id, Space spaceUpdated){
-        return spaceRepository.findById(id).map(space->{
+    @Transactional
+    public Space update(Long id, Space spaceUpdated) {
+        return spaceRepository.findById(id).map(space -> {
             space.setName(spaceUpdated.getName());
             space.setDescription(spaceUpdated.getDescription());
             space.setCapacity(spaceUpdated.getCapacity());
-
             return spaceRepository.save(space);
-        }).orElseThrow(()-> new RuntimeException("Space no encontrado"));
+        }).orElseThrow(() -> new EntityNotFoundException("Space no encontrado con id: " + id));
     }
 
-    public Space updateParcial(Long id, Map<String, Object> campos){
+    @Transactional
+    public Space updateParcial(Long id, Map<String, Object> campos) {
         return spaceRepository.findById(id).map(space -> {
-            if(campos.containsKey("name")){
-                space.setName((String) campos.get("name"));
-            }
-            if(campos.containsKey("description")){
-                space.setDescription((String) campos.get("description"));
-            }
-            if(campos.containsKey("capacity")){
-                space.setCapacity((Integer) campos.get("capacity"));
-            }
+            campos.forEach((key, value) -> {
+                switch (key) {
+                    case "name":
+                        space.setName((String) value);
+                        break;
+                    case "description":
+                        space.setDescription((String) value);
+                        break;
+                    case "capacity":
+                        space.setCapacity((Integer) value);
+                        break;
+                }
+            });
             return spaceRepository.save(space);
-        }).orElseThrow(()-> new RuntimeException("Space no encontrado"));
+        }).orElseThrow(() -> new EntityNotFoundException("Space no encontrado con id: " + id));
     }
 
-    public Space deleteSpace(Long id) {
+    @Transactional
+    public void deleteSpace(Long id) {
         Space space = spaceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Space no encontrado con id: " + id));
-        spaceRepository.deleteById(id);
-        return space;
+        spaceRepository.delete(space);
+        // Forzar sincronización con la base de datos
+        spaceRepository.flush();
     }
 }

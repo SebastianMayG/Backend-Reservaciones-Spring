@@ -28,4 +28,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.space.id as space_id FROM Schedule s WHERE s.space.id = :spaceId")
     List<ScheduleWithSpaceId> findSchedulesBySpaceId(@Param("spaceId") Long spaceId);
 
+    void deleteBySpaceId(Long id);
 }
