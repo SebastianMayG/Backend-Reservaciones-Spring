@@ -45,7 +45,7 @@ public class Schedule {
     private LocalDateTime updatedAt;
 
     @NotNull(message = "El espacio es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "space_id", nullable = false)
     @JsonIgnore
     private Space space;
